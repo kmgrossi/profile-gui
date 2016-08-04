@@ -1,0 +1,67 @@
+<html>
+ <head>
+ <title>ISD PROFILE AND ASSET TOOL</title>
+ <script language="vbscript">     
+
+     dim strTemp, objOption, objNetwork, strComputer, colAccounts, list, objUser
+     Set objNetwork = CreateObject("Wscript.Network")
+     strComputer = objNetwork.ComputerName
+     
+     Sub window_onload
+        Set colAccounts = GetObject("WinNT://" & strComputer & "")
+        colAccounts.Filter = Array("user")
+
+        Set list = CreateObject("System.Collections.ArrayList")
+
+        Dim fs, f, f1, fc, s
+    	Set fs = CreateObject("Scripting.FileSystemObject")
+    	Set f = fs.GetFolder("C:\Users")
+    	Set fc = f.SubFolders
+    	For Each f1 in fc
+    		list.add s & f1.name
+    	Next    		
+
+        For Each strTemp In list
+            Set objOption = window.document.createElement("option")
+            objOption.text = strTemp
+            objOption.value = strTemp
+            teamselect.add(objOption)
+        Next
+     End Sub
+
+     Sub print_value
+        Set listSelection = document.getElementById("selectedVal")
+        MsgBox "selected user: "& listSelection.value
+     End Sub
+
+     Sub copy
+     	Set listSelection = document.getElementById("selectedVal")
+     	dim shell
+ 		set shell=createobject("wscript.shell") 
+ 		shell.run "Copy.bat "& listSelection.value
+        set shell=nothing
+     End Sub
+
+ </script>
+ </head>
+ <body>
+
+ <script type="text/javascript">
+    window.resizeTo(450,450);
+</script>
+
+ <div align=center>
+    <h3 style="color:red;"><strong>ISD PROFILE AND ASSET TOOL</strong></h3>
+     <br><br>
+     <h4>1. Select the user you want to copy from.</h4>
+        Local User List  <br> <select id="selectedVal" Size"25" maxlength="25" name="teamselect" onChange=""></select>
+     <br><br><br>
+     <h4>2. Click this button to confirm the selected user</h4>
+     <input type="button" value="Confirm selected value" name="print_value"  onClick="print_value">  
+     <br><br><br>
+     <h4>3. Click this button to initiate the copying progress.</h4>
+     <input type="button" value="Copy User Profile" name="copy"  onClick="copy">  
+ </div>
+ 
+ </body>
+ </html>
